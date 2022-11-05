@@ -1,6 +1,5 @@
 import React from "react";
 import { useAppSelector } from "../../hooks";
-import CustomPaginationActionsTable from "./TableItem";
 
 const PostItem = () => {
   const posts = useAppSelector((state) => state.todos.posts);
@@ -8,7 +7,7 @@ const PostItem = () => {
 
   return (
     <div>
-      <CustomPaginationActionsTable />
+      
     </div>
   );
 };

@@ -10,12 +10,11 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-
-import {
-  LastPage,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
-} from "@mui/icons-material";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { useAppSelector } from "../../hooks";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -28,6 +27,7 @@ interface TablePaginationActionsProps {
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
+  const posts = useAppSelector((state) => state.todos.posts);
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -62,7 +62,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === "rtl" ? <LastPage /> : <LastPage />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
@@ -91,7 +91,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === "rtl" ? <LastPage /> : <LastPage />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
@@ -101,21 +101,7 @@ function createData(name: string, calories: number, fat: number) {
   return { name, calories, fat };
 }
 
-const rows = [
-  createData("Cupcake", 305, 3.7),
-  createData("Donut", 452, 25.0),
-  createData("Eclair", 262, 16.0),
-  createData("Frozen yoghurt", 159, 6.0),
-  createData("Gingerbread", 356, 16.0),
-  createData("Honeycomb", 408, 3.2),
-  createData("Ice cream sandwich", 237, 9.0),
-  createData("Jelly Bean", 375, 0.0),
-  createData("KitKat", 518, 26.0),
-  createData("Lollipop", 392, 0.2),
-  createData("Marshmallow", 318, 0),
-  createData("Nougat", 360, 19.0),
-  createData("Oreo", 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+const rows = posts.map((el) => createData(el.name, el.age, 12, 12));
 
 export default function CustomPaginationActionsTable() {
   const [page, setPage] = React.useState(0);
@@ -141,7 +127,7 @@ export default function CustomPaginationActionsTable() {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 400 }} aria-label="custom pagination table">
+      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -151,10 +137,8 @@ export default function CustomPaginationActionsTable() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {row.calories}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+
+              <TableCell style={{ width: 160 }} align="center">
                 {row.fat}
               </TableCell>
             </TableRow>
